@@ -10,4 +10,8 @@ export class MemeberService {
     return Promise.resolve(MEMBERS);
   }
 
+  getMember(id: number): Promise<Member> {
+    return this.getMembers()
+      .then(members => members.find(member => member.id === id));
+  }
 }
