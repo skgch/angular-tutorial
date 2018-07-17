@@ -28,6 +28,11 @@ export class MemberDetailComponent implements OnInit {
       .subscribe(member => this.member = member);
   }
 
+  save(): void {
+    this.memberService.update(this.member)
+      .then(() => this.goBack());
+  }
+
   goBack(): void {
     this.location.back();
   }

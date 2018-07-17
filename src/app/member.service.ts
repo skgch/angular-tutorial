@@ -8,6 +8,7 @@ import 'rxjs/add/operator/toPromise';
 export class MemeberService {
 
   membersUrl = 'api/members';
+  private headers = new Headers({ 'Content-Type': 'application/json' });
 
   constructor(private http: Http) { }
 
@@ -15,15 +16,26 @@ export class MemeberService {
     return this.http.get(this.membersUrl)
       .toPromise()
       .then(response => response.json().data as Member[])
-      .catch(this.HandleError);
+      .catch(this.handleError);
   }
 
   getMember(id: number): Promise<Member> {
-    return this.getMembers()
-      .then(members => members.find(member => member.id === id));
+    const url = `${this.membersUrl}/${id}`;
+    return this.http.get(url)
+      .toPromise()
+      .then(response => response.json().data as Member)
+      .catch(this.handleError);
   }
 
-  private HandleError(error: any): Promise<any> {
+  update(member: Member): Promise<Member> {
+    const url = `${this.membersUrl}/${member.id}`;
+    return this.http.put(url, JSON.stringify(member), { headers: this.headers })
+      .toPromise()
+      .then(() => member)
+      .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
     console.log('エラー', error);
     return Promise.reject(error.message || error);
   }
