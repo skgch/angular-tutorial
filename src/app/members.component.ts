@@ -30,6 +30,16 @@ export class MembersComponent implements OnInit {
       .then(members => this.members = members);
   }
 
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.memberService.create(name)
+      .then(member => {
+        this.members.push(member);
+        this.selectedMember = null;
+      });
+  }
+
   gotoDetail() {
     this.router.navigate(['./detail', this.selectedMember.id]);
   }
