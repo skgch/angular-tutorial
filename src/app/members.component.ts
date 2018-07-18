@@ -40,6 +40,16 @@ export class MembersComponent implements OnInit {
       });
   }
 
+  delete(member: Member): void {
+    this.memberService.delete(member.id)
+      .then(() => {
+        this.members = this.members.filter(m => m !== member);
+        if (member === this.selectedMember) {
+          this.selectedMember = null;
+        }
+      });
+  }
+
   gotoDetail() {
     this.router.navigate(['./detail', this.selectedMember.id]);
   }
